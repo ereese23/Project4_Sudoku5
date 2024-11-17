@@ -127,6 +127,7 @@ class SudokuGenerator:
     def fill_box(self, row_start, col_start):
         num = list(range(1, self.row_length + 1))
         random.shuffle(num)
+        num_index = 0
 
         for i in range(self.box_length):
             for j in range(self.box_length):
@@ -213,7 +214,7 @@ class SudokuGenerator:
         cells_removed = 0
         num_cells_removed = self.calculate_num_cells_to_removed()
 
-        while cells_removed < num_cells_to_remove:
+        while cells_removed < self.calculate_num_cells_to_removed():
             row = random.randint(0, self.row_length - 1)
             col = random.randint(0, self.box_length - 1)
 
