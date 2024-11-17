@@ -23,15 +23,14 @@ class SudokuGenerator:
 	None
     '''
     def __init__(self, row_length, removed_cells):
-        # Set up row length and removed cells
-        self.row_length = row_length
+        self.row_length = row_length # Set up row length and removed cells
         self.removed_cells = removed_cells
-
-        # This generates nested lists nicely enough. When row_length is 9, it generates a list containing 9 lists of 9 blank numbers (0)
-        self.board = [[0 for i in range(self.row_length)] for i in range (self.row_length)]
-
-        # Calculate the length of each smaller box, standard is 9, sqrt(9) = 3.
-        self.box_length = int(math.sqrt(self.row_length))
+        '''
+        This generates nested lists nicely enough. When row_length is 9, it generates a list containing 9 lists of 9 ints (0)
+        I couldn't find a simple way to do this without range()
+        '''
+        self.board = [[0 for i in range(self.row_length)] for i in range(self.row_length)]
+        self.box_length = int(math.sqrt(self.row_length)) # Calculate the length of each smaller box, standard is 9, sqrt(9) = 3.
 
     '''
 	Displays the board to the console
@@ -40,8 +39,14 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
+    def get_board(self): # Required according to the project 4 pdf for some provided functions, simple enough.
+        return self.board
+
     def print_board(self):
-        pass
+        for i in range(self.row_length): # Loop through every row, range() makes this fairly simple
+            for j in range(self.row_length): # Then loop through every column in each row
+                print(self.board[i][j], end=" ") # Print the number
+            print() # Move to the next line
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -54,8 +59,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-        pass
-
+        for i in range(self.row_length): # Loop through each column, range() makes this fairly simple
+            if self.board[row][i] == num: # Check if the number is already anywhere in the row at this column, which would mean that num is invalid.
+                return False # Return False if invalid
+        return True # No issues? Valid enough, return True.
     '''
 	Determines if num is contained in the specified column (vertical) of the board
     If num is already in the specified col, return False. Otherwise, return True
@@ -66,8 +73,11 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
-    def valid_in_col(self, col, num):
-        pass
+    def valid_in_col(self, col, num): # this should be similar enough to valid_in_row
+        for i in range(self.row_length): # Loop through each row
+            if self.board[i][col] == num: # Check if the number is already anywhere in the column
+                return False # Return False if invalid
+        return True # Return true otherwise
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -81,8 +91,12 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
-    def valid_in_box(self, row_start, col_start, num):
-        pass
+    def valid_in_box(self, row_start, col_start, num): # I'm defining the box
+        for i in range(row_start, row_start+3): # The comment says +2, but I think it should be +3 with my implementation, row_start is inclusive, row_start + 2 is 3, the last row start (+3) is exclusive, so we're covering 3 rows
+            for j in range(col_start, col_start+3): # Same as above, for columns^
+                if self.board[i][j] == num: # Check if our num already exists
+                    return False # Return False if it does
+        return True # Return true if it doesn't
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -208,3 +222,5 @@ def generate_sudoku(size, removed):
     sudoku.remove_cells()
     board = sudoku.get_board()
     return board
+
+
