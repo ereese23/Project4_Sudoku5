@@ -23,16 +23,15 @@ class SudokuGenerator:
 	None
     '''
     def __init__(self, row_length, removed_cells):
-        pass
+        # Set up row length and removed cells
+        self.row_length = row_length
+        self.removed_cells = removed_cells
 
-    '''
-	Returns a 2D python list of numbers which represents the board
+        # This generates nested lists nicely enough. When row_length is 9, it generates a list containing 9 lists of 9 blank numbers (0)
+        self.board = [[0 for i in range(self.row_length)] for i in range (self.row_length)]
 
-	Parameters: None
-	Return: list[list]
-    '''
-    def get_board(self):
-        pass
+        # Calculate the length of each smaller box, standard is 9, sqrt(9) = 3.
+        self.box_length = int(math.sqrt(self.row_length))
 
     '''
 	Displays the board to the console
