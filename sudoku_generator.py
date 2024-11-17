@@ -22,10 +22,19 @@ class SudokuGenerator:
 	Return:
 	None
     '''
-    def __init__(self, row_length, removed_cells):
-        pass
 
-    '''
+    def __init__(self, row_length, removed_cells):
+        # Set up row length and removed cells
+        self.row_length = row_length
+        self.removed_cells = removed_cells
+
+        # This generates nested lists nicely enough. When row_length is 9, it generates a list containing 9 lists of 9 blank numbers (0)
+        self.board = [[0 for i in range(self.row_length)] for i in range(self.row_length)]
+
+        # Calculate the length of each smaller box, standard is 9, sqrt(9) = 3.
+        self.box_length = int(math.sqrt(self.row_length))
+
+'''
 	Returns a 2D python list of numbers which represents the board
 
 	Parameters: None
@@ -96,7 +105,9 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self, row, col, num):
-        pass
+        return (self.valid_in_row(row, num) and
+                self.valid_in_col(col, num) and
+                self.valid_in_box(row, col, num))
 
     '''
     Fills the specified 3x3 box with values
@@ -109,7 +120,14 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
-        pass
+        num = list(range(1, self.row_length + 1))
+        random.shuffle(num)
+
+        for i in range(self.box_length):
+            for j in range(self.box_length):
+                self.board[row_start + i][col_start + j] = num[num_index]
+                num_index += 1
+
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -119,7 +137,9 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
-        pass
+        for i in range(0, self.row_length, self.box_length):
+            self.fill_box(i, i)
+
 
     '''
     DO NOT CHANGE
@@ -185,7 +205,16 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        pass
+        cells_removed = 0
+        num_cells_removed = self.calculate_num_cells_to_removed()
+
+        while cells_removed < num_cells_to_remove:
+            row = random.randint(0, self.row_length - 1)
+            col = random.randint(0, self.box_length - 1)
+
+            if self.board[row][col] != 0:
+                self.board[row][col] = 0
+                cells_removed += 1
 
 '''
 DO NOT CHANGE
