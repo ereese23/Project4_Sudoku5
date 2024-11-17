@@ -92,9 +92,14 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
-    def valid_in_box(self, row_start, col_start, num): # I'm defining the box
+    def valid_in_box(self, row_start, col_start, num):
+        if row_start >= self.row_length or col_start >= self.row_length: # prevent  out of bounds error and return false
+            return False
+
         for i in range(row_start, row_start+3): # The comment says +2, but I think it should be +3 with my implementation, row_start is inclusive, row_start + 2 is 3, the last row start (+3) is exclusive, so we're covering 3 rows
             for j in range(col_start, col_start+3): # Same as above, for columns^
+                if i >= self.row_length or j >= self.row_length:
+                    return False # prevent out of bounds error
                 if self.board[i][j] == num: # Check if our num already exists
                     return False # Return False if it does
         return True # Return true if it doesn't
@@ -246,3 +251,4 @@ def generate_sudoku(size, removed):
     return board
 
 
+generate_sudoku(9, 30)
