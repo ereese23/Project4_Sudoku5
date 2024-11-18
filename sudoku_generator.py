@@ -99,12 +99,11 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
-    def valid_in_box(self, row_start, col_start, num):
-        for i in range(row_start, row_start + 3): # iterate through rows of the box, use +3 rather than +2 because the last row_start is exclusive
-            for j in range(col_start, col_start + 3): # do the same with the columns
-                if i < self.row_length and j < self.row_length: # prevent out of bounds error
-                    if self.board[i][j] == num: # return False if invalid
-                        return False
+    def valid_in_box(self, row_start, col_start, num): # TESTING: this keeps throwing out of bounds errors so i'm testing out min() to see if i can mitigate this
+        for i in range(row_start, min(row_start + 3, self.row_length)): # iterate through rows of the box, use +3 rather than +2 because the last row_start is exclusive
+            for j in range(col_start, min(col_start + 3, self.row_length)): # do the same with the columns
+                if self.board[i][j] == num: # return False if invalid
+                    return False
         return True # otherwise, it's valid
     '''
     Determines if it is valid to enter num at (row, col) in the board
