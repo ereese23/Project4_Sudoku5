@@ -100,16 +100,12 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
-        if row_start >= self.row_length or col_start >= self.row_length: # prevent  out of bounds error and return false
-            return False
-
-        for i in range(row_start, row_start+3): # The comment says +2, but I think it should be +3 with my implementation, row_start is inclusive, row_start + 2 is 3, the last row start (+3) is exclusive, so we're covering 3 rows
-            for j in range(col_start, col_start+3): # Same as above, for columns^
-                if i >= self.row_length or j >= self.row_length:
-                    return False # prevent out of bounds error
-                if self.board[i][j] == num: # Check if our num already exists
-                    return False # Return False if it does
-        return True # Return true if it doesn't
+        for i in range(row_start, row_start + 3): # iterate through rows of the box, use +3 rather than +2 because the last row_start is exclusive
+            for j in range(col_start, col_start + 3): # do the same with the columns
+                if i < self.row_length and j < self.row_length: # prevent out of bounds error
+                    if self.board[i][j] == num: # return False if invalid
+                        return False
+        return True # otherwise, it's valid
     '''
     Determines if it is valid to enter num at (row, col) in the board
     This is done by checking that num is unused in the appropriate, row, column, and box
@@ -231,7 +227,7 @@ class SudokuGenerator:
 
         while cells_removed < num_cells_to_remove:
             row = random.randint(0, self.row_length - 1)
-            col = random.randint(0, self.box_length - 1)
+            col = random.randint(0, self.row_length - 1)
 
             if self.board[row][col] != 0:
                 self.board[row][col] = 0
