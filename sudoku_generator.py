@@ -65,8 +65,7 @@ class SudokuGenerator:
 
     def valid_in_row(self, row, num):
         for i in range(self.row_length):  # Loop through each column, range() makes this fairly simple
-            if self.board[row][
-                i] == num:  # Check if the number is already anywhere in the row at this column, which would mean that num is invalid.
+            if self.board[row][i] == num:  # Check if the number is already anywhere in the row at this column, which would mean that num is invalid.
                 return False  # Return False if invalid
         return True  # No issues? Valid enough, return True.
 
@@ -99,12 +98,14 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
-    def valid_in_box(self, row_start, col_start, num): # TESTING: this keeps throwing out of bounds errors so i'm testing out min() to see if i can mitigate this
-        for i in range(row_start, min(row_start + 3, self.row_length)): # iterate through rows of the box, use +3 rather than +2 because the last row_start is exclusive
-            for j in range(col_start, min(col_start + 3, self.row_length)): # do the same with the columns
-                if self.board[i][j] == num: # return False if invalid
-                    return False
-        return True # otherwise, it's valid
+    def valid_in_box(self, row_start, col_start, num): # TESTING: this keeps throwing out of bounds errors so i'm testing out a bunch of different forms to see if i can mitigate this
+        box_row_start = row_start - row_start % self.box_length # I believe there may be an issue in converting coordinates from the is_valid function
+        box_col_start = col_start - col_start % self.box_length # Update: This was the issue, converting the coordinates fixed everything.
+        for i in range(box_row_start, box_row_start + self.box_length): # Iterate through the rows
+            for j in range(box_col_start, box_col_start + self.box_length): # Then iterate through the columns
+                if self.board[i][j] == num:
+                    return False # Return False if invalid
+        return True # otherwise return True
     '''
     Determines if it is valid to enter num at (row, col) in the board
     This is done by checking that num is unused in the appropriate, row, column, and box
